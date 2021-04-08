@@ -1,81 +1,174 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './Apps.scss';
-import {TaskList} from './components/tasklist/taskList';
-import {InputField} from './components/inputfield/inputField';
+import TaskList from './components/tasklist/taskList';
+import InputField from './components/inputfield/inputField';
+// import { render } from '@testing-library/react';
+// import {ClickCounter} from './components/click-counter/ClickCounter';
 
 
 
-const App = () => {
-  const theTask = [
+class  App extends React.Component {
+  state = {
+    theTask: [
     {
       task: 'Learn HTML',
       id: 1,
-      status: false
+      isimportant: false,
+      isDone: false,
+      isActive: false
     },
     {
       task: 'Learn CSS',
       id: 2,
-      status: true
+      isimportant: false,
+      isDone: false,
+      isActive: false
     },
     {
       task: 'Learn JS',
       id: 3,
-      status: false
+      isimportant: false,
+      isDone: false,
+      isActive: false
     }
-  ];
+  ],
+
+  displayedList: 'active',
+  newTheTask : []
+
+}
+
+
+displayedActive =  (string) => {
+  console.log('displayedActive', string);
+
+  this.setState ( {displayedList: string});
+  console.log(this)
+};
+
+
+
+
+ 
+
+
+
+  toggleDone = (inputId) => {
+    console.log('toggleDone', inputId);
+
+
+    const stateCb = (preState) => {
+      const {theTask} = preState;
+
+      const newTheTask = theTask.map(item => {
+        const {id, isDone} =item;
+
+        return {
+          ...item,
+          isDone: inputId === id ? !isDone : isDone
+        }; });
+
+      return {
+        theTask:newTheTask
+      };
+    };
+
+
+    this.setState(stateCb);
+  }
+
+
+
+
+
+toggleIsImportant = (inputId) => {
+  console.log(inputId);
+
+
+  const stateCb = (preState) => {
+    const {theTask} = preState;
+
+    const newTheTask = theTask.map(item => {
+      const {id, isimportant} =item;
+
+      return {
+        ...item,
+        isimportant: inputId === id ? !isimportant : isimportant
+      }; });
+
+    return {
+      theTask:newTheTask
+    };
+  };
+
+
+  this.setState(stateCb);
+}
+
+delHandler = (inputId) => {
+    console.log(inputId);
+
+
+    const stateCb = (preState) => {
+      const {theTask} = preState;
+
+      const newTheTask = theTask.filter((item) => item.id !== inputId);
+      return {
+        theTask:newTheTask
+      };
+    };
+
+
+    this.setState(stateCb);
+  }
+
+
+
+
+
+  render() {
+
+    const {theTask,displayedList} = this.state;
+
+    let newTheTask = [];
+
+    if (displayedList === 'all') {
+      newTheTask = this.state.newTheTask;
+    } else if (displayedList === 'active') {
+      newTheTask = this.state.newTheTask.filter(item =>!item.isDone)
+    } else if (displayedList === 'done') {
+      newTheTask = this.state.newTheTask.filter(item =>item.isDone)
+    };
+
+
+    const activeTask = theTask.filter(item => !item.isDone)
+    const completedTask = theTask.filter(item => item.isDone)
+
   return (
     <div className="container">
       <h1>To Do List</h1>
-      <InputField /> <TaskList theTask={theTask} />
-      
+      <h2>Active task: {activeTask.length}</h2>
+      <h2>Completed task: {completedTask.length}</h2>
+      <InputField displayedActive={this.displayedActive}  />
+      <TaskList
+      theTask={theTask}
+      toggleDone={this.toggleDone}
+      delHandler={this.delHandler}
+      toggleIsImportant={this.toggleIsImportant}
+      newTheTask={newTheTask}
+     
+     
+      />
+      {/* <ClickCounter initClicksQty={5}/> */}
     </div>
   )
-};
+  }
+}
+
 
 
 ReactDOM.render(
     <App />,
   document.getElementById('root')
 );
-
-
-
-// import {Comments} from './components';
-// import {Title} from './components/title/Title';
-
-// const App = () => {
-//   const commentsList = [
-//     {
-//       id: 2,
-//       avatar: '.../',
-//       text: 'comment1',
-//       author: 'Ivan'
-//     },
-//     {
-//       id: 3,
-//       avatar: '...../',
-//       text: 'comment22',
-//       author: 'Kate'
-//     },
-//     {
-//       id: 4,
-//       avatar: '../',
-//       text: 'comment3333',
-//       author: 'Vova'
-//     },
-//   ];
-
-//   return ( 
-//     <div><Comments commentsList={commentsList} /> <Title /></div>
-//     );
-// };
-  
-
-
-// const App = () => {
-//   const commentsList = ['Привет', 'Всем'];
-//   return ( 
-//     <div><Comments commentsList={commentsList} /></div>
-//     );
-// };

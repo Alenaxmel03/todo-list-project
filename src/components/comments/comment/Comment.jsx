@@ -5,7 +5,7 @@ import React from 'react';
 //    borderBottom: '1px solid' 
 // }
 
-export const Comment = ({author,text,avatar}) =>{
+export const Comment = ({author,text,avatar,}) =>{
     const style = {
         background: text.length < 10 ? 'red' :  'blue',
         borderBottom: '1px solid'

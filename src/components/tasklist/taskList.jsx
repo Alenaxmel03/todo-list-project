@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react'
 import './style.scss'
-import {TaskItem} from '../taskitem/taskItem';
+import TaskItem from '../taskitem/taskItem';
 
 
-export const TaskList = ({theTask}) => {
-    return (
+export default class TaskList extends Component {
+    render () {
+        const {theTask,toggleDone,delHandler, toggleIsImportant, newTheTask}=this.props
+         return (
         <ul className= "list">
-            {theTask.map((item) => <TaskItem key={item.id} {...item} />
+            {theTask.map((item) => <TaskItem key={item.id} {...item} toggleDone={toggleDone}  delHandler={delHandler}
+            toggleIsImportant={toggleIsImportant}  newTheTask={newTheTask} />
             )}
         </ul>
     );
-};
+};}
+   
